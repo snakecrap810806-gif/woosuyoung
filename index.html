@@ -56,8 +56,8 @@ select, option{ background-color:#151a1e; color:#e8ecef; }
 .alert.err{border-color:rgba(255,134,114,.35); background:rgba(255,134,114,.08)}
 .hidden{display:none}
 
-/* settings bar */
-.settings{position:fixed; top:10px; right:10px; z-index:20; display:flex; gap:8px}
+/* settings bar - HIDDEN BY DEFAULT */
+.settings{position:fixed; top:10px; right:10px; z-index:20; display:none; gap:8px}
 .settings .panel{display:none; flex-direction:column; gap:8px; padding:10px; background:#0e1215cc; border:1px solid var(--line); border-radius:12px; width:320px}
 .settings .panel.show{display:flex}
 .settings input{width:100%;}
@@ -65,7 +65,7 @@ select, option{ background-color:#151a1e; color:#e8ecef; }
 </style>
 </head>
 <body>
-  <div class="settings">
+  <div class="settings" id="settingsBar">
     <button id="btnCog" class="btn" title="설정">⚙ 설정</button>
     <div id="setPanel" class="panel">
       <div class="section-title" style="margin:0">카카오 공유 설정</div>
@@ -77,6 +77,7 @@ select, option{ background-color:#151a1e; color:#e8ecef; }
       <div class="row" style="margin-top:6px">
         <button id="btnSaveCfg" class="btn btn-primary">저장</button>
         <button id="btnClearCfg" class="btn">초기화</button>
+        <button id="btnHideCfg" class="btn">숨기기</button>
       </div>
       <div id="cfgMsg" class="small"></div>
     </div>
@@ -180,26 +181,46 @@ select, option{ background-color:#151a1e; color:#e8ecef; }
 <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.6.0/kakao.min.js" crossorigin="anonymous"></script>
 <script>
 const CFG_KEY = "usuyoung_kakao_cfg";
+const ADMIN_KEY = "usuyoung_admin";
 const CONF = { placeName:"우수영장례식장", address:"전남 해남군 문내면 관광레저로 534-5", tel:"061-535-4440" };
 
-// ----- Settings panel (no-code) -----
+// ---- Admin visibility ----
+const settingsBar = document.getElementById('settingsBar');
+function isAdmin(){
+  const p = new URLSearchParams(location.search);
+  return p.get('admin') === '1' || location.hash.includes('admin') || localStorage.getItem(ADMIN_KEY) === '1';
+}
+function showAdmin(v){
+  settingsBar.style.display = v ? 'flex' : 'none';
+}
+showAdmin(isAdmin());
+// keyboard toggle: Alt+Shift+K
+document.addEventListener('keydown', (e)=>{
+  if(e.altKey && e.shiftKey && (e.key === 'K' || e.key === 'k')){
+    const cur = localStorage.getItem(ADMIN_KEY) === '1';
+    localStorage.setItem(ADMIN_KEY, cur ? '0' : '1');
+    showAdmin(!cur);
+  }
+});
+
+// ----- Settings panel -----
 const btnCog = document.getElementById('btnCog');
 const setPanel = document.getElementById('setPanel');
 const kakaoKey = document.getElementById('kakaoKey');
 const imgUrl = document.getElementById('imgUrl');
 const cfgMsg = document.getElementById('cfgMsg');
-btnCog.onclick = () => setPanel.classList.toggle('show');
+btnCog && (btnCog.onclick = () => setPanel.classList.toggle('show'));
 
 function loadCfg(){
   try { return JSON.parse(localStorage.getItem(CFG_KEY) || "{}"); } catch(_){ return {}; }
 }
 function saveCfg(v){
   localStorage.setItem(CFG_KEY, JSON.stringify(v));
-  cfgMsg.textContent = "저장되었습니다. 공유 버튼을 다시 눌러주세요.";
+  localStorage.setItem(ADMIN_KEY, '1'); // remember admin on this device
+  cfgMsg.textContent = "저장되었습니다. (이 장치에서 관리자 모드 유지)";
 }
 function clearCfg(){
   localStorage.removeItem(CFG_KEY);
-  kakaoKey.value = ""; imgUrl.value = "";
   cfgMsg.textContent = "초기화되었습니다.";
 }
 document.getElementById('btnSaveCfg').onclick = ()=>{
@@ -207,6 +228,7 @@ document.getElementById('btnSaveCfg').onclick = ()=>{
   saveCfg(v);
 };
 document.getElementById('btnClearCfg').onclick = clearCfg;
+document.getElementById('btnHideCfg').onclick = ()=>{ showAdmin(false); };
 
 const cfg = loadCfg();
 if (cfg.kakaoKey) kakaoKey.value = cfg.kakaoKey;
@@ -269,11 +291,13 @@ document.getElementById("btnReset").addEventListener("click", ()=>{
   confirmBox.classList.add("hidden");
 });
 
-// share URL
+// Build share URL (drops admin flags automatically)
 function buildShareUrl(d){
   const u = new URL(location.href);
   const qp = new URLSearchParams({ rid:d.reserveId, date:d.date, room:d.room, guests:d.guests });
-  u.search = qp.toString(); return u.toString();
+  u.search = qp.toString(); // override (removes any ?admin=1)
+  u.hash = ""; // drop #admin
+  return u.toString();
 }
 
 function ensureKakaoInit(){
@@ -281,7 +305,7 @@ function ensureKakaoInit(){
   if (!window.Kakao) return false;
   if (!Kakao.isInitialized()){
     if (!cfg.kakaoKey){
-      shareStatus.textContent = "카카오 JavaScript 키가 설정되지 않았습니다. 우측 상단 ⚙ 설정에서 키를 저장하세요.";
+      shareStatus.textContent = "카카오 JavaScript 키가 설정되지 않았습니다. (관리자 모드에서 키 저장)";
       shareStatus.className = "alert err"; return false;
     }
     try { Kakao.init(cfg.kakaoKey); } catch(e) {
@@ -304,7 +328,7 @@ function shareToKakao(d){
     content: {
       title: "우수영장례식장 예약 안내",
       description,
-      imageUrl: cfg.imgUrl || (location.origin + location.pathname.replace(/\/[^\/]*$/, '') + '/img/share.png'),
+      imageUrl: cfg.imgUrl || (location.origin + location.pathname.replace(/\\/[^\\/]*$/, '') + '/img/share.png'),
       link: { mobileWebUrl: linkUrl, webUrl: linkUrl }
     },
     buttons: [ { title: '예약 내용 보기', link: { mobileWebUrl: linkUrl, webUrl: linkUrl } } ]
@@ -330,7 +354,7 @@ function shareToKakao(d){
   `;
 })();
 
-// route buttons basic
+// route buttons
 (function(){
   const btnN = document.getElementById("btnNaver");
   const btnK = document.getElementById("btnKakao");
