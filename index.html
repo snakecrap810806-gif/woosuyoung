@@ -114,7 +114,7 @@ select, option{ background-color:#151a1e; color:#e8ecef; }
 
   <div class="container">
     <div class="header">
-      <img src="img/logo_kakao.png" alt="우수영장례식장 로고">
+      <img id="brandLogo" src="" alt="우수영장례식장 로고">
     </div>
 
     <div class="addrbar">
@@ -207,7 +207,7 @@ select, option{ background-color:#151a1e; color:#e8ecef; }
       <!-- 카카오 공유: 로고 + 아래 텍스트 -->
       <div id="shareRow" class="share-cta" style="margin-top:10px">
         <button id="btnShare" class="kakao-share" aria-label="카카오톡 공유">
-          <img src="img/kakao_btn.png" alt="카카오톡 로고">
+          <img id="kakaoBtnImg" src="" alt="카카오톡 로고">
           <span>&lt;카카오톡 공유&gt;</span>
         </button>
       </div>
@@ -218,73 +218,78 @@ select, option{ background-color:#151a1e; color:#e8ecef; }
 
 <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.6.0/kakao.min.js" crossorigin="anonymous"></script>
 <script>
+/* ---------- 공통/설정 ---------- */
 const CFG_KEY = "usuyoung_kakao_cfg";
 const ADMIN_KEY = "usuyoung_admin";
 const CONF = { placeName:"우수영장례식장", address:"전남 해남군 문내면 관광레저로 534-5", tel:"061-535-4440" };
 
-/* 상대경로 → 절대 URL */
+const $ = s=>document.querySelector(s);
 function absPath(rel){
   const base = location.origin + location.pathname.replace(/\/[^\/]*$/, '/');
   return new URL(rel, base).toString();
 }
 
-/* 관리자 모드(기본 숨김) */
-const settingsBar = document.getElementById('settingsBar');
-function isAdmin(){
-  const p = new URLSearchParams(location.search);
-  return p.get('admin') === '1' || location.hash.includes('admin') || localStorage.getItem(ADMIN_KEY) === '1';
+/* 이미지 폴백 로더 */
+function pickFirstAvailable(urls, cb){
+  let i=0;
+  (function tryNext(){
+    if(i>=urls.length){ cb(null); return; }
+    const url = urls[i] + (urls[i].includes('?')?'&':'?')+'v='+Date.now();
+    const img = new Image();
+    img.onload = ()=> cb(urls[i]);
+    img.onerror = ()=>{ i++; tryNext(); };
+    img.src = url;
+  })();
 }
+
+/* 헤더 로고 폴백: 순서대로 시도 */
+pickFirstAvailable([
+  absPath('img/로고_흰색.png'),
+  absPath('img/logo_kakao.png'),
+  absPath('img/share.png')
+], url => { if(url) $('#brandLogo').src = url; });
+
+/* 카카오 버튼 아이콘 폴백 */
+pickFirstAvailable([
+  absPath('img/kakao_btn.png'),
+  absPath('img/제목을 입력해주세요_-001.png'),
+  'https://t1.kakaocdn.net/kakaocorp/brand/logo/kakaotalk/kakaotalk_symbol_yellow.png'
+], url => { if(url) $('#kakaoBtnImg').src = url; });
+
+/* ---------- 관리자(숨김) ---------- */
+const settingsBar = $('#settingsBar');
+function isAdmin(){ const p=new URLSearchParams(location.search); return p.get('admin')==='1'||location.hash.includes('admin')||localStorage.getItem(ADMIN_KEY)==='1'; }
 function showAdmin(v){ settingsBar.style.display = v ? 'flex' : 'none'; }
 showAdmin(isAdmin());
-document.addEventListener('keydown', (e)=>{
-  if(e.altKey && e.shiftKey && (e.key === 'K' || e.key === 'k')){
-    const cur = localStorage.getItem(ADMIN_KEY) === '1';
-    localStorage.setItem(ADMIN_KEY, cur ? '0' : '1');
-    showAdmin(!cur);
-  }
-});
+document.addEventListener('keydown', (e)=>{ if(e.altKey&&e.shiftKey&&(e.key==='K'||e.key==='k')){ const cur=localStorage.getItem(ADMIN_KEY)==='1'; localStorage.setItem(ADMIN_KEY,cur?'0':'1'); showAdmin(!cur);} });
+
 const btnCog = document.getElementById('btnCog');
 const setPanel = document.getElementById('setPanel');
 const kakaoKey = document.getElementById('kakaoKey');
 const imgUrl = document.getElementById('imgUrl');
 const cfgMsg = document.getElementById('cfgMsg');
 btnCog && (btnCog.onclick = ()=> setPanel.classList.toggle('show'));
-function loadCfg(){ try{ return JSON.parse(localStorage.getItem(CFG_KEY) || "{}"); }catch(_){ return {}; } }
-function saveCfg(v){ localStorage.setItem(CFG_KEY, JSON.stringify(v)); localStorage.setItem(ADMIN_KEY,'1'); cfgMsg.textContent="저장되었습니다. (이 장치에서 관리자 모드 유지)"; }
+function loadCfg(){ try{return JSON.parse(localStorage.getItem(CFG_KEY)||"{}");}catch(_){return{};} }
+function saveCfg(v){ localStorage.setItem(CFG_KEY, JSON.stringify(v)); localStorage.setItem(ADMIN_KEY,'1'); cfgMsg.textContent="저장되었습니다."; }
 function clearCfg(){ localStorage.removeItem(CFG_KEY); cfgMsg.textContent="초기화되었습니다."; }
 document.getElementById('btnSaveCfg').onclick = ()=> saveCfg({ kakaoKey:kakaoKey.value.trim(), imgUrl:imgUrl.value.trim() });
 document.getElementById('btnClearCfg').onclick = clearCfg;
 document.getElementById('btnHideCfg').onclick = ()=> showAdmin(false);
 const cfg = loadCfg(); if(cfg.kakaoKey) kakaoKey.value = cfg.kakaoKey; if(cfg.imgUrl) imgUrl.value = cfg.imgUrl;
 
-/* 예약 처리 */
-const $ = s=>document.querySelector(s);
+/* ---------- 예약 처리 ---------- */
 const todayISO = ()=> new Date().toISOString().slice(0,10);
-const dateEl = $("#date");
-const alertEl = $("#alert");
-const confirmBox = $("#confirmBox");
-const confirmBody = $("#confirmBody");
-const shareStatus = $("#shareStatus");
-dateEl && (dateEl.min = todayISO(), dateEl.value = todayISO());
-
-function genReserveId(){ const rnd = Math.random().toString(36).slice(2,7).toUpperCase(); return `R-${Date.now().toString().slice(-6)}-${rnd}`; }
+const dateEl = $("#date"); const alertEl = $("#alert"); const confirmBox=$("#confirmBox"); const confirmBody=$("#confirmBody"); const shareStatus=$("#shareStatus");
+dateEl && (dateEl.min=todayISO(), dateEl.value=todayISO());
+function genReserveId(){ const rnd=Math.random().toString(36).slice(2,7).toUpperCase(); return `R-${Date.now().toString().slice(-6)}-${rnd}`; }
 
 $("#btnSubmit")?.addEventListener("click", ()=>{
-  alertEl.className = "alert hidden";
-  const d = $("#date").value;
-  const room = $("#room").value;
-  const guests = $("#guests").value;
-  const note = $("#note").value.trim();
-  const name = $("#name").value.trim();
-  const phone = $("#phone").value.trim();
-  const email = $("#email").value.trim();
-  const agree = $("#agree").checked;
-  if(!d || !room || !name || !phone || !agree){
-    alertEl.textContent = "필수 항목(날짜, 호실, 이름, 연락처, 동의)을 확인해 주세요.";
-    alertEl.className = "alert err"; return;
-  }
-  const rid = genReserveId();
-  const payload = { reserveId:rid, date:d, room, guests, note, name, phone, email, place:CONF.placeName, address:CONF.address, tel:CONF.tel };
+  alertEl.className="alert hidden";
+  const d=$("#date").value, room=$("#room").value, guests=$("#guests").value, note=$("#note").value.trim();
+  const name=$("#name").value.trim(), phone=$("#phone").value.trim(), email=$("#email").value.trim(), agree=$("#agree").checked;
+  if(!d||!room||!name||!phone||!agree){ alertEl.textContent="필수 항목(날짜, 호실, 이름, 연락처, 동의)을 확인해 주세요."; alertEl.className="alert err"; return; }
+  const rid=genReserveId();
+  const payload={ reserveId:rid, date:d, room, guests, note, name, phone, email, place:CONF.placeName, address:CONF.address, tel:CONF.tel };
 
   confirmBox.classList.remove("hidden");
   confirmBody.innerHTML = `
@@ -301,36 +306,28 @@ $("#btnSubmit")?.addEventListener("click", ()=>{
 });
 
 $("#btnReset")?.addEventListener("click", ()=>{
-  $("#note").value=""; $("#guests").value=1; $("#room").value="";
-  $("#name").value=""; $("#phone").value=""; $("#email").value="";
-  $("#agree").checked=false; alertEl.className="alert hidden"; confirmBox.classList.add("hidden");
+  $("#note").value=""; $("#guests").value=1; $("#room").value=""; $("#name").value=""; $("#phone").value=""; $("#email").value=""; $("#agree").checked=false;
+  alertEl.className="alert hidden"; confirmBox.classList.add("hidden");
 });
 
 /* 공유 URL(관리자 파라미터 제거) */
-function buildShareUrl(d){
-  const u = new URL(location.href);
-  const qp = new URLSearchParams({ rid:d.reserveId, date:d.date, room:d.room, guests:d.guests });
-  u.search = qp.toString(); u.hash = "";
-  return u.toString();
-}
+function buildShareUrl(d){ const u=new URL(location.href); const qp=new URLSearchParams({rid:d.reserveId,date:d.date,room:d.room,guests:d.guests}); u.search=qp.toString(); u.hash=""; return u.toString(); }
 
 /* Kakao init */
 function ensureKakaoInit(){
   if(!window.Kakao) return false;
   if(!Kakao.isInitialized()){
-    if(!cfg.kakaoKey){ shareStatus.textContent="카카오 JavaScript 키가 설정되지 않았습니다."; shareStatus.className="alert err"; return false; }
+    if(!cfg.kakaoKey){ shareStatus.textContent="카카오 JavaScript 키가 설정되지 않았습니다. (Alt+Shift+K → 설정)"; shareStatus.className="alert err"; return false; }
     try{ Kakao.init(cfg.kakaoKey); }catch(e){ shareStatus.textContent="Kakao.init 오류: "+e.message; shareStatus.className="alert err"; return false; }
   }
   return true;
 }
 
-/* 공유 썸네일: 파일명 고정(카카오톡 썸네일.png, 절대 URL) */
+/* 공유 썸네일: 파일명 고정(카카오톡 썸네일.png) 또는 설정값 */
 function defaultShareImage(){
   return "https://snakecrap810806-gif.github.io/woosuyoung/img/%EC%B9%B4%EC%B9%B4%EC%98%A4%ED%86%A1%20%EC%8D%B8%EB%84%A4%EC%9D%BC.png";
 }
-function resolveShareImage(){
-  return (cfg.imgUrl && /^https?:\/\//.test(cfg.imgUrl)) ? cfg.imgUrl : defaultShareImage();
-}
+function resolveShareImage(){ return (cfg.imgUrl && /^https?:\/\//.test(cfg.imgUrl)) ? cfg.imgUrl : defaultShareImage(); }
 
 function shareToKakao(d){
   shareStatus.className="alert hidden";
@@ -341,12 +338,7 @@ function shareToKakao(d){
 
   Kakao.Share.sendDefault({
     objectType:'feed',
-    content:{
-      title:"우수영장례식장 예약 안내",
-      description,
-      imageUrl,
-      link:{ mobileWebUrl:linkUrl, webUrl:linkUrl }
-    },
+    content:{ title:"우수영장례식장 예약 안내", description, imageUrl, link:{ mobileWebUrl:linkUrl, webUrl:linkUrl } },
     buttons:[{ title:'예약 내용 보기', link:{ mobileWebUrl:linkUrl, webUrl:linkUrl } }]
   }).then(()=>{ shareStatus.textContent="카카오 공유 창이 열렸습니다."; shareStatus.className="alert ok"; })
     .catch(err=>{ shareStatus.textContent="공유 실패: "+(err?.message||err); shareStatus.className="alert err"; });
@@ -354,12 +346,11 @@ function shareToKakao(d){
 
 /* viewer 모드: rid가 있으면 폼 숨김 */
 (function(){
-  const p = new URLSearchParams(location.search);
+  const p=new URLSearchParams(location.search);
   if(!p.get('rid')) return;
   document.body.classList.add('viewer');
-  const d = { reserveId:p.get('rid'), date:p.get('date')||'', room:p.get('room')||'', guests:p.get('guests')||'', place:CONF.placeName, address:CONF.address, tel:CONF.tel };
-  const box = document.getElementById("confirmBox");
-  const body = document.getElementById("confirmBody");
+  const d={ reserveId:p.get('rid'), date:p.get('date')||'', room:p.get('room')||'', guests:p.get('guests')||'', place:CONF.placeName, address:CONF.address, tel:CONF.tel };
+  const box=$("#confirmBox"), body=$("#confirmBody");
   box.classList.remove("hidden");
   body.innerHTML = `
     <div><b>예약번호</b> · ${d.reserveId}</div>
@@ -372,21 +363,16 @@ function shareToKakao(d){
 
 /* 길찾기 버튼 */
 (function(){
-  const btnN = document.getElementById("btnNaver");
-  const btnK = document.getElementById("btnKakao");
-  const destName = "우수영장례식장";
-  function setBasic(){
-    if(btnN) btnN.href = "https://map.naver.com/p/search/" + encodeURIComponent(destName);
-    if(btnK) btnK.href = "https://map.kakao.com/?q=" + encodeURIComponent(destName);
-  }
+  const btnN=$("#btnNaver"), btnK=$("#btnKakao"), destName="우수영장례식장";
+  function setBasic(){ if(btnN) btnN.href="https://map.naver.com/p/search/"+encodeURIComponent(destName); if(btnK) btnK.href="https://map.kakao.com/?q="+encodeURIComponent(destName); }
   setBasic();
   if(navigator.geolocation){
     navigator.geolocation.getCurrentPosition(pos=>{
-      const slat = pos.coords.latitude, slng = pos.coords.longitude;
-      const n = `nmap://route/car?slat=${slat}&slng=${slng}&sname=${encodeURIComponent("현재 위치")}&dname=${encodeURIComponent(destName)}&appname=${encodeURIComponent(location.host||"web")}`;
-      const k = `kakaomap://route?sp=${slat},${slng}&by=car`;
-      if(btnN){ btnN.href = n; btnN.target = "_self"; }
-      if(btnK){ btnK.href = k; btnK.target = "_self"; }
+      const {latitude:slat, longitude:slng}=pos.coords;
+      const n=`nmap://route/car?slat=${slat}&slng=${slng}&sname=${encodeURIComponent("현재 위치")}&dname=${encodeURIComponent(destName)}&appname=${encodeURIComponent(location.host||"web")}`;
+      const k=`kakaomap://route?sp=${slat},${slng}&by=car`;
+      if(btnN){ btnN.href=n; btnN.target="_self"; }
+      if(btnK){ btnK.href=k; btnK.target="_self"; }
     }, _=>{});
   }
 })();
