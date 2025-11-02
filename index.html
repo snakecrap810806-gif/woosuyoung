@@ -169,7 +169,8 @@ label.caption{display:block;font-size:12px;color:#9fb0ba;margin:0 0 6px}
 <script>
 /*** 설정 ***/
 const BUILD="v7-woosuyoung-2025-11-02";
-const HARD_CODED_KAKAO_KEY=""; // ← 정말 원하시면 여기에 직접 넣으셔도 됩니다(한 줄).
+const HARD_CODED_KAKAO_KEY="const HARD_CODED_KAKAO_KEY = "여기에_카카오_JavaScript_키";
+"; // ← 정말 원하시면 여기에 직접 넣으셔도 됩니다(한 줄).
 
 const CFG_KEY="usuyoung_kakao_cfg";
 const CONF={place:"우수영장례식장",addr:"전남 해남군 문내면 관광레저로 534-5",tel:"061-535-4440"};
@@ -243,7 +244,7 @@ $('#reset').onclick=()=>{['#room','#name','#phone','#email','#note'].forEach(s=>
 
 /*** 카카오 공유 ***/
 function kakaoKey(){
-  const c=cfgLoad(); return (HARD_CODED_KAKAO_KEY||"").trim() || (c.kakaoKey||"").trim();
+  const c=cfgLoad(); return (||"").trim() || (c.kakaoKey||"").trim();
 }
 function ensureKakao(){
   if(!window.Kakao) return {ok:false, reason:"SDK 로드 실패"};
