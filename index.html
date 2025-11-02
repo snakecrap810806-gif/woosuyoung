@@ -9,16 +9,15 @@
 <meta property="og:title" content="우수영장례식장 온라인 예약">
 <meta property="og:description" content="품격있는 장례 절차, 간편 예약 안내">
 <meta property="og:type" content="website">
-<meta property="og:image" content="https://snakecrap810806-gif.github.io/woosuyoung/img/%EC%B9%B4%EC%B9%B4%EC%98%A4%ED%86%A1%20%EC%8D%B8%EB%84%A4%EC%9D%BC.png?v=2">
-<meta property="og:image:width" content="800">
-<meta property="og:image:height" content="800">
+<meta property="og:image" content="https://snakecrap810806-gif.github.io/woosuyoung/img/thumbnail.png?v=1">
+<meta property="og:image:width" content="800"><meta property="og:image:height" content="800">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;700&family=Pretendard:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
-:root{--bg1:#0f1316;--bg2:#161a1e;--ink:#e8ecef;--muted:#9fb0ba;--line:rgba(255,255,255,.08);--card:rgba(22,26,30,.65);--field:rgba(255,255,255,.03);--field2:rgba(255,255,255,.06);--ok:#7ebd8c;--warn:#f3b34a;--err:#ff7f72}
+:root{--bg1:#0f1316;--bg2:#161a1e;--ink:#e8ecef;--muted:#9fb0ba;--line:rgba(255,255,255,.08);--card:rgba(22,26,30,.65);--field:rgba(255,255,255,.03);--field2:rgba(255,255,255,.06);--ok:#7ebd8c;--err:#ff7f72}
 *{box-sizing:border-box} body{margin:0;color:var(--ink);font-family:Pretendard,system-ui,-apple-system,Segoe UI,Roboto,Apple SD Gothic Neo,Helvetica,Arial,'맑은 고딕',sans-serif;background:radial-gradient(1100px 800px at 70% -10%, rgba(126,189,140,.12), transparent 60%),radial-gradient(900px 700px at -10% 20%, rgba(179,201,212,.10), transparent 60%),linear-gradient(180deg,var(--bg1),var(--bg2));}
 .container{max-width:1100px;margin:28px auto;padding:0 16px}
 .header{display:flex;align-items:center;gap:12px;padding:6px 0 2px}
@@ -55,11 +54,18 @@ label.caption{display:block;font-size:12px;color:#9fb0ba;margin:0 0 6px}
 .viewer #intro,.viewer #form,.viewer .addr,.viewer #adminBar,.viewer #shareHelp{display:none!important}
 .viewer #confirm{display:block!important}
 
-/* 관리자/진단 바(Alt+Shift+D) */
+/* 간단 설정 패널(키 없을 때만 노출) */
+#simpleCfg{position:fixed;right:14px;top:14px;background:#0e1215cc;border:1px solid var(--line);backdrop-filter:blur(6px);
+ padding:12px;border-radius:12px;z-index:20;display:none;min-width:260px}
+#simpleCfg .label{font-size:12px;color:#bcd0d8;margin-bottom:6px}
+#simpleCfg input{width:100%;padding:10px;border-radius:10px;border:1px solid var(--line);background:var(--field);color:var(--ink)}
+#simpleCfg .row{display:flex;gap:8px;margin-top:8px}
+.badge{display:inline-block;padding:2px 6px;border-radius:7px;font-size:11px;background:#222;color:#ccc;border:1px solid #333}
+
+/* 관리자/진단 바 */
 #debugBar{position:fixed;right:10px;bottom:10px;z-index:9;display:none;gap:8px}
 #debugPanel{display:none;min-width:280px;max-width:360px;background:#0e1215cc;border:1px solid var(--line);padding:10px;border-radius:12px}
 #debugPanel.show{display:block}
-.badge{display:inline-block;padding:2px 6px;border-radius:7px;font-size:11px;background:#222;color:#ccc;border:1px solid #333}
 </style>
 </head>
 <body>
@@ -71,7 +77,7 @@ label.caption{display:block;font-size:12px;color:#9fb0ba;margin:0 0 6px}
   <div class="addr">
     <span>주소: <b>전남 해남군 문내면 관광레저로 534-5</b> · 대표번호: <b>061-535-4440</b></span>
     <a id="naver" class="btn-mini" href="#">네이버 길찾기</a>
-    <a id="kmap" class="btn-mini" href="#">카카오 길찾기</a>
+    <a id="kmap"  class="btn-mini" href="#">카카오 길찾기</a>
   </div>
 
   <div id="intro" class="card" style="margin-bottom:16px">
@@ -111,7 +117,7 @@ label.caption{display:block;font-size:12px;color:#9fb0ba;margin:0 0 6px}
       </div>
       <div class="row" style="margin-top:12px">
         <button id="submit" class="btn" style="flex:1">예약 신청</button>
-        <button id="reset" class="btn">초기화</button>
+        <button id="reset"  class="btn">초기화</button>
       </div>
       <div id="alert" class="alert hidden"></div>
     </div>
@@ -133,6 +139,17 @@ label.caption{display:block;font-size:12px;color:#9fb0ba;margin:0 0 6px}
   <div class="footer">© 우수영장례식장 · 24시간 안내 · 전남 해남군 문내면 관광레저로 534-5 · 061-535-4440</div>
 </div>
 
+<!-- 간단 설정 패널(키 없으면 자동 노출) -->
+<div id="simpleCfg">
+  <div class="label">카카오 JavaScript 키</div>
+  <input id="cfgKey" placeholder="여기에 키를 붙여 넣고 ▶ 저장">
+  <div class="row">
+    <button id="cfgSave" class="btn" style="flex:1">저장</button>
+    <button id="cfgClose" class="btn">닫기</button>
+  </div>
+  <div style="margin-top:6px;font-size:11px;color:#9fb0ba">Alt+Shift+K 로 다시 열 수 있습니다.</div>
+</div>
+
 <!-- 관리자/진단바 -->
 <div id="debugBar">
   <button id="dbgToggle" class="btn">진단</button>
@@ -150,11 +167,11 @@ label.caption{display:block;font-size:12px;color:#9fb0ba;margin:0 0 6px}
 
 <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.6.0/kakao.min.js" crossorigin="anonymous"></script>
 <script>
-/*** 설정/상수 ***/
-const BUILD = "v7-woosuyoung-2025-11-02"; // 화면 좌하단 '진단'에서 확인
-const HARD_CODED_KAKAO_KEY = ""; // ← 여기에 키를 직접 넣으면(권장) UI 없이도 동작
+/*** 설정 ***/
+const BUILD="v7-woosuyoung-2025-11-02";
+const HARD_CODED_KAKAO_KEY=""; // ← 정말 원하시면 여기에 직접 넣으셔도 됩니다(한 줄).
 
-const CFG_KEY="usuyoung_kakao_cfg", ADMIN_KEY="usuyoung_admin";
+const CFG_KEY="usuyoung_kakao_cfg";
 const CONF={place:"우수영장례식장",addr:"전남 해남군 문내면 관광레저로 534-5",tel:"061-535-4440"};
 
 /*** 유틸 ***/
@@ -162,24 +179,22 @@ const $=s=>document.querySelector(s);
 const today=()=>new Date().toISOString().slice(0,10);
 const bust=s=>s+(s.includes("?")?"&":"?")+"v="+encodeURIComponent(BUILD);
 function abs(rel){const b=location.origin+location.pathname.replace(/\/[^\/]*$/,'/');return new URL(rel,b).toString()}
+function cfgLoad(){try{return JSON.parse(localStorage.getItem(CFG_KEY)||"{}")}catch{return{}}}
+function cfgSave(obj){localStorage.setItem(CFG_KEY,JSON.stringify(obj||{}))}
 
-/*** 로고 로딩 (폴백 + 텍스트) ***/
+/*** 로고 로딩(폴백) ***/
 (function(){
-  const cands=[abs('img/로고_흰색.png'), abs('img/logo_kakao.png'), abs('img/share.png')];
-  const img=$('#brand');
-  let i=0;
-  function tryNext(){
-    if(i>=cands.length){ img.remove(); const t=document.createElement('div'); t.textContent="우수영장례식장"; t.className='brand fallback'; $('.header').appendChild(t); return; }
-    const u=bust(cands[i++]); const test=new Image();
-    test.onload=()=>{ img.src=u; }; test.onerror=tryNext; test.src=u;
-  } tryNext();
+  const cands=[abs('img/로고_흰색.png'),abs('img/logo.png'),abs('img/share.png')];
+  const img=$('#brand'); let i=0;
+  (function next(){ if(i>=cands.length){ img.remove(); const t=document.createElement('div'); t.textContent="우수영장례식장"; t.className='brand fallback'; $('.header').appendChild(t); return; }
+    const u=bust(cands[i++]); const tImg=new Image(); tImg.onload=()=>img.src=u; tImg.onerror=next; tImg.src=u; })();
 })();
 
-/*** 길찾기 기본 링크 + 현재 위치 파라미터 ***/
+/*** 길찾기 링크(현재 위치 파라미터 지원) ***/
 (function(){
   const name=encodeURIComponent("우수영장례식장");
   $('#naver').href="https://map.naver.com/p/search/"+name;
-  $('#kmap').href="https://map.kakao.com/?q="+name;
+  $('#kmap').href ="https://map.kakao.com/?q="+name;
   if(navigator.geolocation){
     navigator.geolocation.getCurrentPosition(({coords})=>{
       const s=`${coords.latitude},${coords.longitude}`;
@@ -213,7 +228,7 @@ $('#submit').onclick=()=>{
 };
 $('#reset').onclick=()=>{['#room','#name','#phone','#email','#note'].forEach(s=>$(s).value=""); $('#guests').value=1; $('#agree').checked=false; $('#alert').className='alert hidden'; $('#confirm').classList.add('hidden');}
 
-/*** 공유 전용 뷰어(링크에 rid가 있으면 폼 숨김) ***/
+/*** 공유 전용 뷰어(요약만 노출) ***/
 (function(){
   const p=new URLSearchParams(location.search);
   if(!p.get('rid')) return;
@@ -227,7 +242,6 @@ $('#reset').onclick=()=>{['#room','#name','#phone','#email','#note'].forEach(s=>
 })();
 
 /*** 카카오 공유 ***/
-function cfgLoad(){try{return JSON.parse(localStorage.getItem(CFG_KEY)||"{}")}catch{return{}}}
 function kakaoKey(){
   const c=cfgLoad(); return (HARD_CODED_KAKAO_KEY||"").trim() || (c.kakaoKey||"").trim();
 }
@@ -241,20 +255,21 @@ function ensureKakao(){
   return {ok:true};
 }
 function shareUrl(d){
-  const u=new URL(location.href); u.search=new URLSearchParams({rid:d.id,date:d.date,room:d.room,guests:d.guests}).toString(); u.hash=""; return u.toString();
+  const u=new URL(location.href);
+  u.search=new URLSearchParams({rid:d.id,date:d.date,room:d.room,guests:d.guests}).toString(); u.hash=""; return u.toString();
 }
 function shareImg(){
-  const cfg=cfgLoad();
-  return (cfg.imgUrl&&/^https?:\/\//.test(cfg.imgUrl)) ? cfg.imgUrl
-    : "https://snakecrap810806-gif.github.io/woosuyoung/img/%EC%B9%B4%EC%B9%B4%EC%98%A4%ED%86%A1%20%EC%8D%B8%EB%84%A4%EC%9D%BC.png?v=2";
+  const url=abs('img/thumbnail.png'); return bust(url);
 }
 function shareToKakao(d){
   const st=$('#shareMsg'); st.className='alert hidden';
   const ok=ensureKakao();
-  if(!ok.ok){ st.textContent=ok.reason+" (Alt+Shift+D → 진단 확인)"; st.className='alert err'; return; }
+  if(!ok.ok){ st.textContent=ok.reason; st.className='alert err'; return; }
   Kakao.Share.sendDefault({
     objectType:'feed',
-    content:{ title:"우수영장례식장 예약 안내", description:`${d.date} · ${d.room} · ${d.guests}명 · 예약번호 ${d.id}`, imageUrl:shareImg(), link:{mobileWebUrl:shareUrl(d), webUrl:shareUrl(d)} },
+    content:{ title:"우수영장례식장 예약 안내",
+      description:`${d.date} · ${d.room} · ${d.guests}명 · 예약번호 ${d.id}`,
+      imageUrl:shareImg(), link:{mobileWebUrl:shareUrl(d), webUrl:shareUrl(d)} },
     buttons:[{title:"예약 내용 보기", link:{mobileWebUrl:shareUrl(d), webUrl:shareUrl(d)}}]
   }).then(()=>{st.textContent="카카오 공유 창이 열렸습니다."; st.className='alert ok';})
     .catch(e=>{st.textContent="공유 실패: "+(e?.message||e); st.className='alert err';});
@@ -262,21 +277,33 @@ function shareToKakao(d){
 
 /*** 카카오 버튼 아이콘(파일 없으면 기본 아이콘) ***/
 (function(){
-  const cands=[abs('img/kakao_btn.png'), 'https://t1.kakaocdn.net/kakaocorp/brand/logo/kakaotalk/kakaotalk_symbol_yellow.png'];
-  const el=$('#kbtn'); let i=0;
-  function next(){ if(i>=cands.length){ return; } const u=bust(cands[i++]); const im=new Image(); im.onload=()=>el.src=u; im.onerror=next; im.src=u; }
-  next();
+  const cands=[abs('img/kakao_btn.png'),
+               'https://t1.kakaocdn.net/kakaocorp/brand/logo/kakaotalk/kakaotalk_symbol_yellow.png'];
+  const el=$('#kbtn'); let i=0; (function next(){ if(i>=cands.length){return;}
+    const u=bust(cands[i++]); const im=new Image(); im.onload=()=>el.src=u; im.onerror=next; im.src=u; })();
+})();
+
+/*** 간단 설정 패널(키 없을 때만 자동 노출) ***/
+(function(){
+  const pane=$('#simpleCfg'), inp=$('#cfgKey');
+  function show(){pane.style.display='block'}
+  function hide(){pane.style.display='none'}
+  function need(){return !kakaoKey()}
+  if(need()) show();
+  $('#cfgSave').onclick=()=>{ const v=inp.value.trim(); if(!v){alert('키를 입력해 주세요.');return;}
+    const cfg=cfgLoad(); cfg.kakaoKey=v; cfgSave(cfg); location.reload(); };
+  $('#cfgClose').onclick=()=>hide();
+  document.addEventListener('keydown',e=>{ if(e.altKey&&e.shiftKey&&(e.key==='K'||e.key==='k')){ need()?show():hide(); }});
 })();
 
 /*** 자가진단(Alt+Shift+D) ***/
 (function(){
-  const bar=$('#debugBar'), pan=$('#debugPanel'); $('#buildTag').textContent=BUILD; $('#host').textContent=location.origin;
+  const bar=$('#debugBar'), pan=$('#debugPanel');
+  $('#buildTag').textContent=BUILD; $('#host').textContent=location.origin;
   function update(){
-    $('#chkKey').textContent = kakaoKey() ? "키 감지됨" : "없음";
+    $('#chkKey').textContent = kakaoKey()? "키 감지됨" : "없음";
     const init=window.Kakao && Kakao.isInitialized(); $('#chkInit').textContent = init ? "true" : "false";
-    // 로고 상태
-    const okLogo = !!$('#brand').getAttribute('src');
-    $('#chkLogo').textContent = okLogo ? "이미지 OK" : "텍스트 대체";
+    const okLogo=!!$('#brand').getAttribute('src'); $('#chkLogo').textContent= okLogo? "이미지 OK":"텍스트 대체";
   }
   document.addEventListener('keydown',e=>{ if(e.altKey&&e.shiftKey&&(e.key==='D'||e.key==='d')){ bar.style.display='flex'; pan.classList.toggle('show'); update(); }});
   $('#dbgToggle').onclick=()=>{pan.classList.toggle('show'); update();};
