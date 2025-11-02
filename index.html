@@ -1,33 +1,33 @@
 <!doctype html>
 <html lang="ko">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>우수영장례식장 | 온라인 예약</title>
 
-<!-- 기본 OG (런타임에서 더 안전한 썸네일을 찾아 씁니다) -->
-<meta property="og:title" content="우수영장례식장 온라인 예약">
-<meta property="og:description" content="품격있는 장례 절차, 간편 예약 안내">
-<meta property="og:image" content="img/카카오톡 썸네일.png">
+<!-- OG 기본값(런타임에서도 동일 파일로 세팅) -->
+<meta property="og:title" content="우수영장례식장 온라인 예약" />
+<meta property="og:description" content="품격 있는 장례 절차, 간편 예약 안내" />
+<meta property="og:image" content="img/%EC%9A%B0%EC%88%98%EC%98%81%EC%9E%A5%EB%A1%80%EC%8B%9C%EC%9E%A5%20%EC%98%88%EC%95%BD%EC%84%9C%EB%B9%84%EC%8A%A4%20%EC%8D%B8%EB%84%A4%EC%9D%BC.png" />
 
 <style>
 :root{
   --bg1:#0F1316; --bg2:#161A1E;
   --ink:#E8ECEF; --muted:#9FB0BA;
-  --line:rgba(255,255,255,.09);
+  --line:rgba(255,255,255,.10);
   --field:#121619; --field2:#1A1F23; --accent:#78C099;
 }
 *{box-sizing:border-box}
 html,body{height:100%;margin:0;color:var(--ink);
   font-family:-apple-system,system-ui,Segoe UI,Roboto,'Noto Sans KR','맑은 고딕',sans-serif;
-  background:linear-gradient(180deg,var(--bg1),var(--bg2));}
+  background:linear-gradient(180deg,var(--bg1),var(--bg2))}
 a{color:inherit;text-decoration:none}
 .container{max-width:1100px;margin:20px auto;padding:0 16px}
 .header{display:flex;align-items:center;gap:12px}
 .brand{height:44px;display:block}
 .brand.fallback{font-weight:800;font-size:20px}
 .addr{display:flex;gap:10px;align-items:center;color:#bcd0d8;font-size:12px;margin:8px 0 18px;flex-wrap:wrap}
-.btn-mini{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);padding:6px 10px;border-radius:10px;background:var(--field2)}
+.btn-mini{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);padding:6px 10px;border-radius:10px;background:var(--field2);color:var(--ink)}
 .btn-mini:hover{background:var(--field)}
 .card{background:rgba(255,255,255,.03);backdrop-filter:blur(6px);
   border:1px solid var(--line);border-radius:18px;padding:20px}
@@ -35,9 +35,11 @@ a{color:inherit;text-decoration:none}
 .sub{color:var(--muted);font-size:14px}
 .grid{display:grid;gap:16px}
 @media(min-width:960px){.grid-2{grid-template-columns:1.1fr .9fr}}
+
 label.caption{display:block;font-size:12px;color:#9fb0ba;margin:0 0 6px}
-.input,select{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--field);color:var(--ink);outline:none;appearance:none}
-.input:focus,select:focus{border-color:#78c09955;box-shadow:0 0 0 4px #78c09922}
+.input, select{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--field);color:var(--ink);outline:none;appearance:none}
+.input::placeholder{color:#8da0aa}
+.input:focus, select:focus{border-color:#78c09955;box-shadow:0 0 0 4px #78c09922}
 select{
   background-image:
     linear-gradient(45deg,transparent 50%,#9fb0ba 50%),
@@ -50,37 +52,40 @@ select{
   background-size:5px 5px,5px 5px,1px 1.5em;
   background-repeat:no-repeat;
 }
+
 .row{display:flex;gap:10px;flex-wrap:wrap}
-.btn{display:inline-flex;justify-content:center;align-items:center;gap:8px;padding:12px 16px;border-radius:12px;border:1px solid var(--line);background:var(--field2);cursor:pointer}
+.btn{display:inline-flex;justify-content:center;align-items:center;gap:8px;padding:12px 16px;border-radius:12px;border:1px solid var(--line);background:var(--field2);cursor:pointer;color:#fff}
 .btn:hover{background:var(--field)}
 .alert{padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--field2);margin-top:10px}
 .alert.ok{border-color:#78c09980;background:#78c09914}
 .alert.err{border-color:#ff8a8080;background:#ff8a8014}
 .hidden{display:none}
+
 .share-cta{display:flex;gap:14px;align-items:center;margin-top:10px}
 .kakao-share{display:flex;flex-direction:column;align-items:center;gap:6px;background:transparent;border:0;cursor:pointer}
 .kakao-share img{width:56px;height:56px;border-radius:14px;box-shadow:0 6px 16px rgba(0,0,0,.35);object-fit:cover;background:#FEE500}
 .kakao-share span{font-weight:800;font-size:13px;color:#FEE500}
+
 .footer{color:#8fa0aa;font-size:12px;text-align:center;padding:20px 0}
-/* 뷰어 모드(요약만 표시) */
 .viewer #intro,.viewer #form,.viewer .addr,#shareGuide{display:none!important}
 .viewer #confirm{display:block!important}
 </style>
 </head>
 <body>
 <div class="container">
-  <!-- 로고: 자동 탐색 + 블로그 새창 -->
+  <!-- 로고(새창으로 블로그) -->
   <div class="header">
     <a href="https://blog.naver.com/woosuyoung-" target="_blank" rel="noopener">
-      <img id="brand" class="brand" alt="우수영장례식장 로고">
+      <img id="brand" class="brand" src="img/%EB%A1%9C%EA%B3%A0_%ED%9D%89%EC%83%89.png" alt="우수영장례식장 로고" />
     </a>
   </div>
 
   <!-- 주소/길찾기 -->
   <div class="addr">
     <span>주소: <b>전남 해남군 문내면 관광레저로 534-5</b> · 대표번호: <b>061-535-4440</b></span>
-    <a id="naver" class="btn-mini" href="#" target="_blank" rel="noopener">네이버 길찾기</a>
-    <a id="kakaoMap" class="btn-mini" href="#" target="_blank" rel="noopener">카카오 길찾기</a>
+    <!-- 기본 웹지도 링크: 즉시 동작, 모바일이면 스크립트가 앱 스킴으로 교체 -->
+    <a id="naver" class="btn-mini" href="https://map.naver.com/p/search/%EC%9A%B0%EC%88%98%EC%98%81%EC%9E%A5%EB%A1%80%EC%8B%9D%EC%9E%A5" target="_blank" rel="noopener">네이버 길찾기</a>
+    <a id="kakaoMap" class="btn-mini" href="https://map.kakao.com/?q=%EC%9A%B0%EC%88%98%EC%98%81%EC%9E%A5%EB%A1%80%EC%8B%9D%EC%9E%A5" target="_blank" rel="noopener">카카오 길찾기</a>
   </div>
 
   <div id="intro" class="card" style="margin-bottom:16px">
@@ -88,12 +93,12 @@ select{
     <div class="sub">차분하고 품위 있는 절차로 예약을 도와드립니다. 상주/가족 전용 링크 제공 가능합니다.</div>
   </div>
 
-  <!-- 폼 -->
+  <!-- 예약 폼 -->
   <div id="form" class="grid grid-2">
     <div class="card">
       <label class="caption">1) 예약 날짜</label>
-      <input id="date" type="date" class="input">
-      <hr style="border-color:var(--line);margin:16px 0">
+      <input id="date" type="date" class="input" />
+      <hr style="border-color:var(--line);margin:16px 0" />
       <label class="caption">2) 호실 선택</label>
       <select id="room" class="input">
         <option value="">호실을 선택해 주세요</option>
@@ -101,25 +106,25 @@ select{
         <option>특실 201호</option>
         <option>202호</option>
       </select>
-      <hr style="border-color:var(--line);margin:16px 0">
+      <hr style="border-color:var(--line);margin:16px 0" />
       <label class="caption">3) 예상 인원 · 요청사항</label>
       <div class="row">
-        <input id="guests" type="number" class="input" style="flex:0 0 140px" min="1" value="1">
-        <input id="note" class="input" style="flex:1" placeholder="주차, 조화 안내 등">
+        <input id="guests" type="number" class="input" style="flex:0 0 140px" min="1" value="1" />
+        <input id="note" class="input" style="flex:1" placeholder="주차, 조화 안내 등" />
       </div>
     </div>
 
     <div class="card">
       <label class="caption">신청자 정보</label>
       <div class="row">
-        <input id="name"  class="input" style="flex:1 1 200px" placeholder="신청자 성함">
-        <input id="phone" class="input" style="flex:1 1 200px" placeholder="010-0000-0000">
+        <input id="name"  class="input" style="flex:1 1 200px" placeholder="신청자 성함" />
+        <input id="phone" class="input" style="flex:1 1 200px" placeholder="010-0000-0000" />
       </div>
       <div class="row" style="margin-top:10px">
-        <input id="email" type="email" class="input" placeholder="you@example.com">
+        <input id="email" type="email" class="input" placeholder="you@example.com" />
       </div>
       <div class="row" style="align-items:center;margin-top:10px">
-        <input id="agree" type="checkbox"><span class="sub" style="font-size:12px">예약 안내 및 개인정보 처리에 동의합니다.</span>
+        <input id="agree" type="checkbox" /><span class="sub" style="font-size:12px">예약 안내 및 개인정보 처리에 동의합니다.</span>
       </div>
       <div class="row" style="margin-top:12px">
         <button id="submit" class="btn" style="flex:1">예약 신청</button>
@@ -137,7 +142,7 @@ select{
     <div id="shareGuide" class="sub" style="font-size:12px;margin-top:6px">가족에게 공유해 주세요.</div>
     <div class="share-cta">
       <button id="shareBtn" class="kakao-share" aria-label="카카오톡 공유">
-        <img id="kakaoIcon" alt="KakaoTalk">
+        <img id="kakaoIcon" alt="KakaoTalk" src="img/%EC%B9%B4%EC%B9%B4%EC%98%A4%ED%86%A1%20%EB%A1%9C%EA%B3%A0.png" />
         <span>&lt;카카오톡 공유&gt;</span>
       </button>
       <button id="copyBtn" class="btn" title="링크 복사">링크 복사</button>
@@ -150,88 +155,31 @@ select{
 <!-- Kakao SDK -->
 <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.6.0/kakao.min.js" crossorigin="anonymous"></script>
 <script>
-/* ================ 설정 ================ */
-const KAKAO_JS_KEY = ""; // 카카오 JavaScript 키(비워두면 링크복사 공유)
+/* ===== 설정 ===== */
+const KAKAO_JS_KEY = ""; // ← 카카오 JavaScript 키(없으면 링크복사 공유)
 
-/* ================ 유틸 ================ */
+/* ===== 유틸 ===== */
 const $ = s => document.querySelector(s);
 const todayLocal = () => { const d=new Date(); d.setMinutes(d.getMinutes()-d.getTimezoneOffset()); return d.toISOString().slice(0,10); };
 const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 function makeRid(){ return "R-"+Date.now().toString().slice(-6)+"-"+Math.random().toString(36).slice(2,5).toUpperCase(); }
 
-// 여러 후보 이미지를 순차 시도(404 방지)
-function tryImages(candidates, apply){
-  let i=0, probe=new Image();
-  const go=()=>{ probe.src = candidates[i] + (candidates[i].includes('?')?'':'?v=' + Date.now()); };
-  probe.onload = ()=> apply(candidates[i]);
-  probe.onerror = ()=>{ if(++i<candidates.length) go(); else apply(null); };
-  go();
-}
+/* 날짜 기본값 */
+(function(){ const d=todayLocal(); const el=$('#date'); el.value=d; el.min=d; })();
 
-/* ================ 로고/버튼/썸네일 자동 탐색 ================ */
-let SHARE_THUMB = null;
-
-(function loadBrandAndIcons(){
-  const base = location.origin + location.pathname.replace(/\/[^\/]*$/,'/') ;
-  const brandCands = [
-    base+'img/로고_흰색.png', base+'img/로고_흰색.PNG',
-    base+'img/logo-white.png', base+'img/logo.png'
-  ];
-  const iconCands = [
-    base+'img/제목을 입력해주세요_-001.png',
-    base+'img/kakao-share.png',
-    'https://t1.kakaocdn.net/kakaocorp/brand/logo/kakaotalk/kakaotalk_symbol_yellow.png'
-  ];
-  const thumbCands = [
-    base+'img/카카오톡 썸네일.png',
-    base+'img/%EC%B9%B4%EC%B9%B4%EC%98%A4%ED%86%A1%20%EC%8D%B8%EB%84%A4%EC%9D%BC.png',
-    base+'img/thumb-800.png',
-    'https://t1.kakaocdn.net/kakaocorp/brand/logo/kakaotalk/kakaotalk_symbol_yellow.png'
-  ];
-
-  tryImages(brandCands, url=>{
-    const img = $('#brand');
-    if(url){
-      img.src = url;
-      img.onerror = function(){
-        const p=this.parentElement; if(!p) return;
-        const t=document.createElement('div'); t.textContent='우수영장례식장'; t.className='brand fallback';
-        p.replaceChild(t, this);
-      }
-    }else{
-      const p=img.parentElement; const t=document.createElement('div');
-      t.textContent='우수영장례식장'; t.className='brand fallback'; p.replaceChild(t, img);
-    }
-  });
-
-  tryImages(iconCands, url=>{
-    $('#kakaoIcon').src = url || iconCands[iconCands.length-1];
-  });
-
-  tryImages(thumbCands, url=>{ SHARE_THUMB = url; });
-})();
-
-/* ================ 날짜 기본값/지도링크 ================ */
-(function initDate(){
-  const d=todayLocal(); const el=$('#date'); el.value=d; el.min=d;
-})();
-(function setMapLinks(){
+/* 지도 링크: 기본은 웹지도, 모바일+위치허용 시 앱 스킴으로 교체 */
+(function(){
   const place = encodeURIComponent('우수영장례식장');
-  // 기본: 웹 지도
-  $('#naver').href    = `https://map.naver.com/p/search/${place}`;
-  $('#kakaoMap').href = `https://map.kakao.com/?q=${place}`;
-
   if(isMobile && navigator.geolocation){
     navigator.geolocation.getCurrentPosition(({coords})=>{
       const lat=coords.latitude, lng=coords.longitude, sname=encodeURIComponent('현재 위치');
-      // 모바일 앱 스킴(데스크톱 경고 제거)
       $('#naver').href    = `nmap://route/car?slat=${lat}&slng=${lng}&sname=${sname}&dname=${place}&appname=${encodeURIComponent(location.host||'web')}`;
       $('#kakaoMap').href = `kakaomap://route?sp=${lat},${lng}&by=car`;
-    },()=>{ /* 거부시 웹 지도 유지 */ });
+    },()=>{ /* 거부 시 웹지도 유지 */ });
   }
 })();
 
-/* ================ 예약/초기화 ================ */
+/* 예약/초기화 */
 $('#submit').addEventListener('click', ()=>{
   const date=$('#date').value, room=$('#room').value, guests=$('#guests').value||'1', note=$('#note').value.trim();
   const name=$('#name').value.trim(), phone=$('#phone').value.trim(), email=$('#email').value.trim(), agree=$('#agree').checked;
@@ -246,8 +194,7 @@ $('#submit').addEventListener('click', ()=>{
     <div><b>예상 인원</b> · ${guests}명</div>
     <div><b>신청자</b> · ${name} (${phone}) ${email?`· ${email}`:''}</div>
     ${note?`<div><b>요청</b> · ${note}</div>`:''}
-    <div class="sub" style="font-size:12px">장소: 우수영장례식장 · 전남 해남군 문내면 관광레저로 534-5 · 061-535-4440</div>
-  `;
+    <div class="sub" style="font-size:12px">장소: 우수영장례식장 · 전남 해남군 문내면 관광레저로 534-5 · 061-535-4440</div>`;
   $('#confirm').classList.remove('hidden');
 
   $('#shareBtn').onclick = ()=> shareToKakao({id,date,room,guests});
@@ -262,8 +209,8 @@ $('#reset').addEventListener('click', ()=>{
   const d=todayLocal(); $('#date').value=d; $('#date').min=d;
 });
 
-/* ================ 뷰어 모드(요약만) ================ */
-(function viewer(){
+/* 뷰어 모드(요약 전용) */
+(function(){
   const p=new URLSearchParams(location.search);
   if(!p.get('rid')) return;
   document.body.classList.add('viewer');
@@ -276,7 +223,7 @@ $('#reset').addEventListener('click', ()=>{
     <div class="sub" style="font-size:12px">장소: 우수영장례식장 · 전남 해남군 문내면 관광레저로 534-5 · 061-535-4440</div>`;
 })();
 
-/* ================ 공유 (카카오/링크복사) ================ */
+/* 공유 */
 function shareUrl(d){
   const u=new URL(location.href);
   u.search = new URLSearchParams({rid:d.id,date:d.date,room:d.room,guests:d.guests}).toString();
@@ -301,12 +248,12 @@ function shareToKakao(d){
     content:{
       title:'우수영장례식장 예약 안내',
       description:`${d.date} · ${d.room} · ${d.guests}명 · 예약번호 ${d.id}`,
-      imageUrl: SHARE_THUMB || (location.origin + location.pathname.replace(/\/[^\/]*$/,'/') + 'img/%EC%B9%B4%EC%B9%B4%EC%98%A4%ED%86%A1%20%EC%8D%B8%EB%84%A4%EC%9D%BC.png'),
+      imageUrl: location.origin + location.pathname.replace(/[^/]+$/,'') + 'img/%EC%9A%B0%EC%88%98%EC%98%81%EC%9E%A5%EB%A1%80%EC%8B%9C%EC%9E%A5%20%EC%98%88%EC%95%BD%EC%84%9C%EB%B9%84%EC%8A%A4%20%EC%8D%B8%EB%84%A4%EC%9D%BC.png',
       link:{mobileWebUrl:shareUrl(d), webUrl:shareUrl(d)}
     },
     buttons:[{title:'예약 내용 보기', link:{mobileWebUrl:shareUrl(d), webUrl:shareUrl(d)}}]
   }).then(()=>{box.textContent='카카오 공유 창이 열렸습니다.'; box.className='alert ok';})
-    .catch(e=>{copyShareLink(d); box.textContent='카카오 공유 실패로 링크를 복사했습니다.'; box.className='alert err';});
+    .catch(()=>{copyShareLink(d); box.textContent='카카오 공유 실패로 링크를 복사했습니다.'; box.className='alert err';});
 }
 </script>
 </body>
