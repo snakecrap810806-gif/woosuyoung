@@ -1,14 +1,14 @@
 <!doctype html>
 <html lang="ko">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>우수영장례식장 | 온라인 예약</title>
 
-<!-- OG 기본값(런타임에서도 동일 파일로 세팅) -->
-<meta property="og:title" content="우수영장례식장 온라인 예약" />
-<meta property="og:description" content="품격 있는 장례 절차, 간편 예약 안내" />
-<meta property="og:image" content="img/%EC%9A%B0%EC%88%98%EC%98%81%EC%9E%A5%EB%A1%80%EC%8B%9C%EC%9E%A5%20%EC%98%88%EC%95%BD%EC%84%9C%EB%B9%84%EC%8A%A4%20%EC%8D%B8%EB%84%A4%EC%9D%BC.png" />
+<!-- OG 미리보기(런타임에도 동일 파일로 다시 세팅) -->
+<meta property="og:title" content="우수영장례식장 온라인 예약"/>
+<meta property="og:description" content="품격 있는 장례 절차, 간편 예약 안내"/>
+<meta property="og:image" content="img/%EC%9A%B0%EC%88%98%EC%98%81%EC%9E%A5%EB%A1%80%EC%8B%9C%EC%9E%A5%20%EC%98%88%EC%95%BD%EC%84%9C%EB%B9%84%EC%8A%A4%20%EC%8D%B8%EB%84%A4%EC%9D%BC.png"/>
 
 <style>
 :root{
@@ -19,16 +19,13 @@
 }
 *{box-sizing:border-box}
 html,body{height:100%;margin:0;color:var(--ink);
-  font-family:-apple-system,system-ui,Segoe UI,Roboto,'Noto Sans KR','맑은 고딕',sans-serif;
-  background:linear-gradient(180deg,var(--bg1),var(--bg2))}
-a{color:inherit;text-decoration:none}
+  background:linear-gradient(180deg,var(--bg1),var(--bg2));
+  font-family:-apple-system,system-ui,Segoe UI,Roboto,"Noto Sans KR","맑은 고딕",sans-serif;}
 .container{max-width:1100px;margin:20px auto;padding:0 16px}
 .header{display:flex;align-items:center;gap:12px}
 .brand{height:44px;display:block}
 .brand.fallback{font-weight:800;font-size:20px}
-.addr{display:flex;gap:10px;align-items:center;color:#bcd0d8;font-size:12px;margin:8px 0 18px;flex-wrap:wrap}
-.btn-mini{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);padding:6px 10px;border-radius:10px;background:var(--field2);color:var(--ink)}
-.btn-mini:hover{background:var(--field)}
+.addr{color:#bcd0d8;font-size:12px;margin:8px 0 18px}
 .card{background:rgba(255,255,255,.03);backdrop-filter:blur(6px);
   border:1px solid var(--line);border-radius:18px;padding:20px}
 .h1{font-weight:800;font-size:26px;margin:0 0 10px}
@@ -37,7 +34,8 @@ a{color:inherit;text-decoration:none}
 @media(min-width:960px){.grid-2{grid-template-columns:1.1fr .9fr}}
 
 label.caption{display:block;font-size:12px;color:#9fb0ba;margin:0 0 6px}
-.input, select{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--field);color:var(--ink);outline:none;appearance:none}
+.input, select{width:100%;padding:12px 14px;border:1px solid var(--line);
+  border-radius:12px;background:var(--field);color:#fff;outline:none;appearance:none}
 .input::placeholder{color:#8da0aa}
 .input:focus, select:focus{border-color:#78c09955;box-shadow:0 0 0 4px #78c09922}
 select{
@@ -54,7 +52,9 @@ select{
 }
 
 .row{display:flex;gap:10px;flex-wrap:wrap}
-.btn{display:inline-flex;justify-content:center;align-items:center;gap:8px;padding:12px 16px;border-radius:12px;border:1px solid var(--line);background:var(--field2);cursor:pointer;color:#fff}
+.btn{display:inline-flex;justify-content:center;align-items:center;gap:8px;
+  padding:12px 16px;border-radius:12px;border:1px solid var(--line);
+  background:var(--field2);cursor:pointer;color:#fff}
 .btn:hover{background:var(--field)}
 .alert{padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--field2);margin-top:10px}
 .alert.ok{border-color:#78c09980;background:#78c09914}
@@ -75,17 +75,14 @@ select{
 <div class="container">
   <!-- 로고(새창으로 블로그) -->
   <div class="header">
-    <a href="https://blog.naver.com/woosuyoung-" target="_blank" rel="noopener">
-      <img id="brand" class="brand" src="img/%EB%A1%9C%EA%B3%A0_%ED%9D%89%EC%83%89.png" alt="우수영장례식장 로고" />
+    <a href="https://blog.naver.com/woosuyoung-" target="_blank" rel="noopener" aria-label="우수영장례식장 홈페이지">
+      <img id="brand" class="brand" alt="우수영장례식장 로고"/>
     </a>
   </div>
 
-  <!-- 주소/길찾기 -->
+  <!-- 주소만 표시 (길찾기 버튼 제거) -->
   <div class="addr">
-    <span>주소: <b>전남 해남군 문내면 관광레저로 534-5</b> · 대표번호: <b>061-535-4440</b></span>
-    <!-- 기본 웹지도 링크: 즉시 동작, 모바일이면 스크립트가 앱 스킴으로 교체 -->
-    <a id="naver" class="btn-mini" href="https://map.naver.com/p/search/%EC%9A%B0%EC%88%98%EC%98%81%EC%9E%A5%EB%A1%80%EC%8B%9D%EC%9E%A5" target="_blank" rel="noopener">네이버 길찾기</a>
-    <a id="kakaoMap" class="btn-mini" href="https://map.kakao.com/?q=%EC%9A%B0%EC%88%98%EC%98%81%EC%9E%A5%EB%A1%80%EC%8B%9D%EC%9E%A5" target="_blank" rel="noopener">카카오 길찾기</a>
+    주소: <b>전남 해남군 문내면 관광레저로 534-5</b> · 대표번호: <b>061-535-4440</b>
   </div>
 
   <div id="intro" class="card" style="margin-bottom:16px">
@@ -97,8 +94,8 @@ select{
   <div id="form" class="grid grid-2">
     <div class="card">
       <label class="caption">1) 예약 날짜</label>
-      <input id="date" type="date" class="input" />
-      <hr style="border-color:var(--line);margin:16px 0" />
+      <input id="date" type="date" class="input"/>
+      <hr style="border-color:var(--line);margin:16px 0"/>
       <label class="caption">2) 호실 선택</label>
       <select id="room" class="input">
         <option value="">호실을 선택해 주세요</option>
@@ -106,25 +103,25 @@ select{
         <option>특실 201호</option>
         <option>202호</option>
       </select>
-      <hr style="border-color:var(--line);margin:16px 0" />
+      <hr style="border-color:var(--line);margin:16px 0"/>
       <label class="caption">3) 예상 인원 · 요청사항</label>
       <div class="row">
-        <input id="guests" type="number" class="input" style="flex:0 0 140px" min="1" value="1" />
-        <input id="note" class="input" style="flex:1" placeholder="주차, 조화 안내 등" />
+        <input id="guests" type="number" class="input" style="flex:0 0 140px" min="1" value="1"/>
+        <input id="note" class="input" style="flex:1" placeholder="주차, 조화 안내 등"/>
       </div>
     </div>
 
     <div class="card">
       <label class="caption">신청자 정보</label>
       <div class="row">
-        <input id="name"  class="input" style="flex:1 1 200px" placeholder="신청자 성함" />
-        <input id="phone" class="input" style="flex:1 1 200px" placeholder="010-0000-0000" />
+        <input id="name"  class="input" style="flex:1 1 200px" placeholder="신청자 성함"/>
+        <input id="phone" class="input" style="flex:1 1 200px" placeholder="010-0000-0000"/>
       </div>
       <div class="row" style="margin-top:10px">
-        <input id="email" type="email" class="input" placeholder="you@example.com" />
+        <input id="email" type="email" class="input" placeholder="you@example.com"/>
       </div>
       <div class="row" style="align-items:center;margin-top:10px">
-        <input id="agree" type="checkbox" /><span class="sub" style="font-size:12px">예약 안내 및 개인정보 처리에 동의합니다.</span>
+        <input id="agree" type="checkbox"/><span class="sub" style="font-size:12px">예약 안내 및 개인정보 처리에 동의합니다.</span>
       </div>
       <div class="row" style="margin-top:12px">
         <button id="submit" class="btn" style="flex:1">예약 신청</button>
@@ -142,7 +139,7 @@ select{
     <div id="shareGuide" class="sub" style="font-size:12px;margin-top:6px">가족에게 공유해 주세요.</div>
     <div class="share-cta">
       <button id="shareBtn" class="kakao-share" aria-label="카카오톡 공유">
-        <img id="kakaoIcon" alt="KakaoTalk" src="img/%EC%B9%B4%EC%B9%B4%EC%98%A4%ED%86%A1%20%EB%A1%9C%EA%B3%A0.png" />
+        <img id="kakaoIcon" alt="KakaoTalk"/>
         <span>&lt;카카오톡 공유&gt;</span>
       </button>
       <button id="copyBtn" class="btn" title="링크 복사">링크 복사</button>
@@ -155,36 +152,73 @@ select{
 <!-- Kakao SDK -->
 <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.6.0/kakao.min.js" crossorigin="anonymous"></script>
 <script>
-/* ===== 설정 ===== */
-const KAKAO_JS_KEY = ""; // ← 카카오 JavaScript 키(없으면 링크복사 공유)
+/* ========= 설정 ========= */
+const KAKAO_JS_KEY = ""; // ← 카카오 JavaScript 키 (비워두면 링크복사로 대체)
 
-/* ===== 유틸 ===== */
+/* ========= 공통 유틸 ========= */
 const $ = s => document.querySelector(s);
-const todayLocal = () => { const d=new Date(); d.setMinutes(d.getMinutes()-d.getTimezoneOffset()); return d.toISOString().slice(0,10); };
-const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+function todayLocal(){ const d=new Date(); d.setMinutes(d.getMinutes()-d.getTimezoneOffset()); return d.toISOString().slice(0,10); }
 function makeRid(){ return "R-"+Date.now().toString().slice(-6)+"-"+Math.random().toString(36).slice(2,5).toUpperCase(); }
+function cacheBust(url){ const sep = url.includes('?') ? '&' : '?'; return url + sep + 'v=' + Date.now(); }
 
+/* 이미지 로더(여러 후보를 순차 시도 → 실패 시 폴백 텍스트) */
+function loadImageCandidates(imgEl, candidates, fallbackText){
+  let i=0;
+  const tryNext=()=>{
+    if(i>=candidates.length){
+      if(fallbackText){
+        const span=document.createElement('span');
+        span.textContent=fallbackText; span.className='brand fallback';
+        imgEl.replaceWith(span);
+      }
+      return;
+    }
+    const url=candidates[i++]; imgEl.onerror=tryNext; imgEl.src=cacheBust(url);
+  };
+  tryNext();
+}
+
+/* ========== 초기 세팅 ========== */
 /* 날짜 기본값 */
 (function(){ const d=todayLocal(); const el=$('#date'); el.value=d; el.min=d; })();
 
-/* 지도 링크: 기본은 웹지도, 모바일+위치허용 시 앱 스킴으로 교체 */
+/* 로고 확실히 표시 (파일명/인코딩/폴백 모두 처리) */
+loadImageCandidates(
+  $('#brand'),
+  [
+    'img/로고_흰색.png',
+    'img/%EB%A1%9C%EA%B3%A0_%ED%9D%89%EC%83%89.png',
+    'img/logo-white.png',
+    'img/logo.png'
+  ],
+  '우수영장례식장'
+);
+
+/* 카카오 아이콘 */
+loadImageCandidates(
+  $('#kakaoIcon'),
+  [
+    'img/카카오톡 로고.png',
+    'img/%EC%B9%B4%EC%B9%B4%EC%98%A4%ED%86%A1%20%EB%A1%9C%EA%B3%A0.png',
+    'https://t1.kakaocdn.net/kakaocorp/brand/logo/kakaotalk/kakaotalk_symbol_yellow.png'
+  ]
+);
+
+/* OG 이미지(런타임에서도 확정 세팅) */
 (function(){
-  const place = encodeURIComponent('우수영장례식장');
-  if(isMobile && navigator.geolocation){
-    navigator.geolocation.getCurrentPosition(({coords})=>{
-      const lat=coords.latitude, lng=coords.longitude, sname=encodeURIComponent('현재 위치');
-      $('#naver').href    = `nmap://route/car?slat=${lat}&slng=${lng}&sname=${sname}&dname=${place}&appname=${encodeURIComponent(location.host||'web')}`;
-      $('#kakaoMap').href = `kakaomap://route?sp=${lat},${lng}&by=car`;
-    },()=>{ /* 거부 시 웹지도 유지 */ });
-  }
+  const og=document.querySelector('meta[property="og:image"]');
+  const preferred='img/%EC%9A%B0%EC%88%98%EC%98%81%EC%9E%A5%EB%A1%80%EC%8B%9C%EC%9E%A5%20%EC%98%88%EC%95%BD%EC%84%9C%EB%B9%84%EC%8A%A4%20%EC%8D%B8%EB%84%A4%EC%9D%BC.png';
+  og && (og.setAttribute('content', preferred));
 })();
 
-/* 예약/초기화 */
+/* ========== 예약/초기화 ========== */
 $('#submit').addEventListener('click', ()=>{
   const date=$('#date').value, room=$('#room').value, guests=$('#guests').value||'1', note=$('#note').value.trim();
   const name=$('#name').value.trim(), phone=$('#phone').value.trim(), email=$('#email').value.trim(), agree=$('#agree').checked;
   const warn=$('#warn'); warn.className='alert hidden';
-  if(!date||!room||!name||!phone||!agree){ warn.textContent='필수 항목(날짜/호실/이름/연락처/동의)을 확인해 주세요.'; warn.className='alert err'; return; }
+  if(!date||!room||!name||!phone||!agree){
+    warn.textContent='필수 항목(날짜/호실/이름/연락처/동의)을 확인해 주세요.'; warn.className='alert err'; return;
+  }
 
   const id=makeRid();
   $('#cbody').innerHTML = `
@@ -209,7 +243,7 @@ $('#reset').addEventListener('click', ()=>{
   const d=todayLocal(); $('#date').value=d; $('#date').min=d;
 });
 
-/* 뷰어 모드(요약 전용) */
+/* 뷰어 모드(요약 전용 화면) */
 (function(){
   const p=new URLSearchParams(location.search);
   if(!p.get('rid')) return;
@@ -223,7 +257,7 @@ $('#reset').addEventListener('click', ()=>{
     <div class="sub" style="font-size:12px">장소: 우수영장례식장 · 전남 해남군 문내면 관광레저로 534-5 · 061-535-4440</div>`;
 })();
 
-/* 공유 */
+/* ========== 공유 ========== */
 function shareUrl(d){
   const u=new URL(location.href);
   u.search = new URLSearchParams({rid:d.id,date:d.date,room:d.room,guests:d.guests}).toString();
@@ -248,7 +282,8 @@ function shareToKakao(d){
     content:{
       title:'우수영장례식장 예약 안내',
       description:`${d.date} · ${d.room} · ${d.guests}명 · 예약번호 ${d.id}`,
-      imageUrl: location.origin + location.pathname.replace(/[^/]+$/,'') + 'img/%EC%9A%B0%EC%88%98%EC%98%81%EC%9E%A5%EB%A1%80%EC%8B%9C%EC%9E%A5%20%EC%98%88%EC%95%BD%EC%84%9C%EB%B9%84%EC%8A%A4%20%EC%8D%B8%EB%84%A4%EC%9D%BC.png',
+      imageUrl: location.origin + location.pathname.replace(/[^/]+$/,'') +
+        'img/%EC%9A%B0%EC%88%98%EC%98%81%EC%9E%A5%EB%A1%80%EC%8B%9C%EC%9E%A5%20%EC%98%88%EC%95%BD%EC%84%9C%EB%B9%84%EC%8A%A4%20%EC%8D%B8%EB%84%A4%EC%9D%BC.png',
       link:{mobileWebUrl:shareUrl(d), webUrl:shareUrl(d)}
     },
     buttons:[{title:'예약 내용 보기', link:{mobileWebUrl:shareUrl(d), webUrl:shareUrl(d)}}]
