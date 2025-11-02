@@ -10,7 +10,7 @@
 <style>
 :root{
   --bg1:#0f1316; --bg2:#161a1e; --ink:#e8ecef; --muted:#a7b0b7;
-  --brand:#7ebd8c; --accent:#b3c9d4; --line:rgba(255,255,255,.06);
+  --brand:#7ebd8c; --line:rgba(255,255,255,.06);
   --card:rgba(22,26,30,.65); --glass:blur(10px) saturate(120%);
   --ring:0 0 0 4px rgba(126,189,140,.25); --shadow:0 10px 30px rgba(0,0,0,.35);
   --field:rgba(255,255,255,.02); --field-hover:rgba(255,255,255,.05);
@@ -47,7 +47,6 @@ select, option{ background-color:#151a1e; color:#e8ecef; }
 .input:focus, select:focus, textarea:focus{box-shadow:var(--ring); border-color:rgba(126,189,140,.35)}
 .btn{ display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:12px 16px; border-radius:12px; border:1px solid var(--line); background:var(--field); cursor:pointer; color:#e6eef2;}
 .btn:hover{background:var(--field-hover)}
-.btn-primary{ background:linear-gradient(180deg, rgba(126,189,140,.95), rgba(126,189,140,.85)); border-color:transparent; color:#081e12; font-weight:700;}
 .caption{font-size:12px; color:#b6c4cc}
 .footer{color:#8fa0aa; font-size:12px; text-align:center; padding:24px 0}
 .list{display:flex; flex-direction:column; gap:10px}
@@ -56,20 +55,32 @@ select, option{ background-color:#151a1e; color:#e8ecef; }
 .alert.err{border-color:rgba(255,134,114,.35); background:rgba(255,134,114,.08)}
 .hidden{display:none}
 
-/* --- 관리자 설정바(기본 숨김) --- */
+/* 관리자 설정(기본 숨김) */
 .settings{position:fixed; top:10px; right:10px; z-index:20; display:none; gap:8px}
 .settings .panel{display:none; flex-direction:column; gap:8px; padding:10px; background:#0e1215cc; border:1px solid var(--line); border-radius:12px; width:320px}
 .settings .panel.show{display:flex}
 .settings input{width:100%;}
 .small{font-size:11px; color:#94a8b2}
 
-/* --- viewer 모드: 요약만 보이게 --- */
+/* viewer 모드: 요약만 */
 .viewer #introCard,
 .viewer #formGrid,
 .viewer .addrbar,
 .viewer .settings,
 .viewer #shareRow { display:none !important; }
 .viewer #confirmBox { display:block !important; }
+
+/* ▶ 새로운 카카오톡 공유 버튼 스타일 */
+.share-cta{display:flex; gap:16px; align-items:center; flex-wrap:wrap}
+.kakao-share{
+  display:flex; flex-direction:column; align-items:center; gap:8px;
+  background:transparent; border:0; cursor:pointer; padding:0;
+}
+.kakao-share img{
+  width:64px; height:64px; border-radius:16px; box-shadow:0 6px 16px rgba(0,0,0,.35);
+  object-fit:cover; background:#FEE500;
+}
+.kakao-share span{font-weight:700; font-size:13px; color:#FEE500;}
 </style>
 </head>
 <body>
@@ -81,10 +92,10 @@ select, option{ background-color:#151a1e; color:#e8ecef; }
       <label class="caption">JavaScript 키</label>
       <input id="kakaoKey" class="input" placeholder="카카오 개발자 콘솔 JavaScript 키" />
       <label class="caption">공유 썸네일 URL(선택)</label>
-      <input id="imgUrl" class="input" placeholder="예: https://도메인/img/share.png" />
+      <input id="imgUrl" class="input" placeholder="예: https://snakecrap810806-gif.github.io/woosuyoung/img/logo_kakao.png" />
       <div class="small">* 도메인(예: https://USERNAME.github.io )을 카카오 개발자 콘솔 → 플랫폼 → Web에 등록해야 합니다.</div>
       <div class="row" style="margin-top:6px">
-        <button id="btnSaveCfg" class="btn btn-primary">저장</button>
+        <button id="btnSaveCfg" class="btn">저장</button>
         <button id="btnClearCfg" class="btn">초기화</button>
         <button id="btnHideCfg" class="btn">숨기기</button>
       </div>
@@ -94,8 +105,7 @@ select, option{ background-color:#151a1e; color:#e8ecef; }
 
   <div class="container">
     <div class="header">
-      <!-- 필요시 실제 로고 이미지 src로 교체 -->
-      <img src="img/share.png" alt="우수영장례식장 로고">
+      <img src="img/logo_kakao.png" alt="우수영장례식장 로고">
     </div>
 
     <div class="addrbar">
@@ -105,13 +115,11 @@ select, option{ background-color:#151a1e; color:#e8ecef; }
       <a class="addrbtn" id="btnKakao" href="#">카카오 길찾기</a>
     </div>
 
-    <!-- 인트로 카드 -->
     <div id="introCard" class="card" style="margin-bottom:16px">
       <div class="h1">온라인 예약</div>
       <div class="sub">차분하고 품위 있는 절차로 예약을 도와드립니다. 상주/가족 전용 링크 제공 가능합니다.</div>
     </div>
 
-    <!-- 예약 폼 -->
     <div id="formGrid" class="grid grid-2">
       <div class="card">
         <div class="section-title">1) 날짜 선택</div>
@@ -174,7 +182,7 @@ select, option{ background-color:#151a1e; color:#e8ecef; }
           <span class="caption">예약 안내 및 개인정보 처리에 동의합니다.</span>
         </div>
         <div class="row" style="margin-top:12px">
-          <button id="btnSubmit" class="btn btn-primary" style="flex:1">예약 신청</button>
+          <button id="btnSubmit" class="btn" style="flex:1">예약 신청</button>
           <button id="btnReset" class="btn">초기화</button>
         </div>
         <div id="alert" class="alert hidden" style="margin-top:10px"></div>
@@ -186,8 +194,13 @@ select, option{ background-color:#151a1e; color:#e8ecef; }
       <div class="section-title">예약이 생성되었습니다</div>
       <div id="confirmBody" class="list"></div>
       <div id="shareStatus" class="alert hidden" style="margin-top:8px"></div>
-      <div id="shareRow" class="row" style="margin-top:10px">
-        <button id="btnShare" class="btn">카카오로 공유</button>
+
+      <!-- ▶ 새 카카오 공유 버튼: 로고 + 아래 텍스트 "<카카오톡 공유>" -->
+      <div id="shareRow" class="share-cta" style="margin-top:10px">
+        <button id="btnShare" class="kakao-share" aria-label="카카오톡 공유">
+          <img src="img/kakao_btn.png" alt="카카오톡 로고">
+          <span>&lt;카카오톡 공유&gt;</span>
+        </button>
       </div>
     </div>
 
@@ -200,7 +213,13 @@ const CFG_KEY = "usuyoung_kakao_cfg";
 const ADMIN_KEY = "usuyoung_admin";
 const CONF = { placeName:"우수영장례식장", address:"전남 해남군 문내면 관광레저로 534-5", tel:"061-535-4440" };
 
-/* ---- 관리자 모드 표시 제어(기본 숨김) ---- */
+/* 상대경로 → 절대 URL */
+function absPath(rel){
+  const base = location.origin + location.pathname.replace(/\/[^\/]*$/, '/');
+  return new URL(rel, base).toString();
+}
+
+/* 관리자 모드(기본 숨김) */
 const settingsBar = document.getElementById('settingsBar');
 function isAdmin(){
   const p = new URLSearchParams(location.search);
@@ -208,7 +227,6 @@ function isAdmin(){
 }
 function showAdmin(v){ settingsBar.style.display = v ? 'flex' : 'none'; }
 showAdmin(isAdmin());
-// Alt+Shift+K 로 토글
 document.addEventListener('keydown', (e)=>{
   if(e.altKey && e.shiftKey && (e.key === 'K' || e.key === 'k')){
     const cur = localStorage.getItem(ADMIN_KEY) === '1';
@@ -216,7 +234,6 @@ document.addEventListener('keydown', (e)=>{
     showAdmin(!cur);
   }
 });
-// 설정 패널
 const btnCog = document.getElementById('btnCog');
 const setPanel = document.getElementById('setPanel');
 const kakaoKey = document.getElementById('kakaoKey');
@@ -231,7 +248,7 @@ document.getElementById('btnClearCfg').onclick = clearCfg;
 document.getElementById('btnHideCfg').onclick = ()=> showAdmin(false);
 const cfg = loadCfg(); if(cfg.kakaoKey) kakaoKey.value = cfg.kakaoKey; if(cfg.imgUrl) imgUrl.value = cfg.imgUrl;
 
-/* ---- 예약 흐름 ---- */
+/* 예약 흐름 */
 const $ = s=>document.querySelector(s);
 const todayISO = ()=> new Date().toISOString().slice(0,10);
 const dateEl = $("#date");
@@ -280,13 +297,15 @@ $("#btnReset")?.addEventListener("click", ()=>{
   $("#agree").checked=false; alertEl.className="alert hidden"; confirmBox.classList.add("hidden");
 });
 
-/* ---- 공유 URL(관리자 파라미터 제거) ---- */
+/* 공유 URL(관리자 파라미터 제거) */
 function buildShareUrl(d){
   const u = new URL(location.href);
   const qp = new URLSearchParams({ rid:d.reserveId, date:d.date, room:d.room, guests:d.guests });
-  u.search = qp.toString(); u.hash = ""; // ?admin, #admin 제거
+  u.search = qp.toString(); u.hash = "";
   return u.toString();
 }
+
+/* Kakao init */
 function ensureKakaoInit(){
   if(!window.Kakao) return false;
   if(!Kakao.isInitialized()){
@@ -295,17 +314,25 @@ function ensureKakaoInit(){
   }
   return true;
 }
+
+/* 공유: 썸네일(로고) 보장 */
+function defaultShareImage(){ return absPath('img/logo_kakao.png'); }
+function resolveShareImage(){
+  return (cfg.imgUrl && /^https?:\/\//.test(cfg.imgUrl)) ? cfg.imgUrl : defaultShareImage();
+}
 function shareToKakao(d){
   shareStatus.className="alert hidden";
   if(!ensureKakaoInit()) return;
   const linkUrl = buildShareUrl(d);
   const description = `${d.date} · ${d.room} · ${d.guests}명 · 예약번호 ${d.reserveId}`;
+  const imageUrl = resolveShareImage();
+
   Kakao.Share.sendDefault({
     objectType:'feed',
     content:{
       title:"우수영장례식장 예약 안내",
       description,
-      imageUrl: cfg.imgUrl || (location.origin + location.pathname.replace(/\/[^\/]*$/, '') + '/img/share.png'),
+      imageUrl,
       link:{ mobileWebUrl:linkUrl, webUrl:linkUrl }
     },
     buttons:[{ title:'예약 내용 보기', link:{ mobileWebUrl:linkUrl, webUrl:linkUrl } }]
@@ -313,11 +340,11 @@ function shareToKakao(d){
     .catch(err=>{ shareStatus.textContent="공유 실패: "+(err?.message||err); shareStatus.className="alert err"; });
 }
 
-/* ---- viewer 모드: rid 파라미터가 있으면 폼 숨김 ---- */
+/* viewer 모드: rid가 있으면 폼 숨김 */
 (function(){
   const p = new URLSearchParams(location.search);
-  if(!p.get('rid')) return;            // viewer 모드 아님
-  document.body.classList.add('viewer');  // 폼/설명/설정/길찾기 숨김
+  if(!p.get('rid')) return;
+  document.body.classList.add('viewer');
   const d = { reserveId:p.get('rid'), date:p.get('date')||'', room:p.get('room')||'', guests:p.get('guests')||'', place:CONF.placeName, address:CONF.address, tel:CONF.tel };
   const box = document.getElementById("confirmBox");
   const body = document.getElementById("confirmBody");
@@ -331,7 +358,7 @@ function shareToKakao(d){
   `;
 })();
 
-/* ---- 길찾기 버튼(선택) ---- */
+/* 길찾기 버튼 */
 (function(){
   const btnN = document.getElementById("btnNaver");
   const btnK = document.getElementById("btnKakao");
