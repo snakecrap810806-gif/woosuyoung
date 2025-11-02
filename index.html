@@ -4,6 +4,15 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>우수영장례식장 | 예약</title>
+
+<!-- OG 스크랩(카카오/네이버 미리보기) : 썸네일 고정 -->
+<meta property="og:title" content="우수영장례식장 온라인 예약서비스">
+<meta property="og:description" content="품격있는 장례식장, 우수영장례식장 온라인 예약">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://snakecrap810806-gif.github.io/woosuyoung/img/%EC%B9%B4%EC%B9%B4%EC%98%A4%ED%86%A1%20%EC%8D%B8%EB%84%A4%EC%9D%BC.png">
+<meta property="og:image:width" content="800">
+<meta property="og:image:height" content="800">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700&family=Pretendard:wght@400;600;700&display=swap" rel="stylesheet">
@@ -70,7 +79,7 @@ select, option{ background-color:#151a1e; color:#e8ecef; }
 .viewer #shareRow { display:none !important; }
 .viewer #confirmBox { display:block !important; }
 
-/* ▶ 새로운 카카오톡 공유 버튼 스타일 */
+/* 카카오톡 공유 버튼 (로고 + 텍스트) */
 .share-cta{display:flex; gap:16px; align-items:center; flex-wrap:wrap}
 .kakao-share{
   display:flex; flex-direction:column; align-items:center; gap:8px;
@@ -92,7 +101,7 @@ select, option{ background-color:#151a1e; color:#e8ecef; }
       <label class="caption">JavaScript 키</label>
       <input id="kakaoKey" class="input" placeholder="카카오 개발자 콘솔 JavaScript 키" />
       <label class="caption">공유 썸네일 URL(선택)</label>
-      <input id="imgUrl" class="input" placeholder="예: https://snakecrap810806-gif.github.io/woosuyoung/img/logo_kakao.png" />
+      <input id="imgUrl" class="input" placeholder="절대 URL(없으면 기본 이미지 사용)" />
       <div class="small">* 도메인(예: https://USERNAME.github.io )을 카카오 개발자 콘솔 → 플랫폼 → Web에 등록해야 합니다.</div>
       <div class="row" style="margin-top:6px">
         <button id="btnSaveCfg" class="btn">저장</button>
@@ -195,7 +204,7 @@ select, option{ background-color:#151a1e; color:#e8ecef; }
       <div id="confirmBody" class="list"></div>
       <div id="shareStatus" class="alert hidden" style="margin-top:8px"></div>
 
-      <!-- ▶ 새 카카오 공유 버튼: 로고 + 아래 텍스트 "<카카오톡 공유>" -->
+      <!-- 카카오 공유: 로고 + 아래 텍스트 -->
       <div id="shareRow" class="share-cta" style="margin-top:10px">
         <button id="btnShare" class="kakao-share" aria-label="카카오톡 공유">
           <img src="img/kakao_btn.png" alt="카카오톡 로고">
@@ -248,7 +257,7 @@ document.getElementById('btnClearCfg').onclick = clearCfg;
 document.getElementById('btnHideCfg').onclick = ()=> showAdmin(false);
 const cfg = loadCfg(); if(cfg.kakaoKey) kakaoKey.value = cfg.kakaoKey; if(cfg.imgUrl) imgUrl.value = cfg.imgUrl;
 
-/* 예약 흐름 */
+/* 예약 처리 */
 const $ = s=>document.querySelector(s);
 const todayISO = ()=> new Date().toISOString().slice(0,10);
 const dateEl = $("#date");
@@ -315,11 +324,14 @@ function ensureKakaoInit(){
   return true;
 }
 
-/* 공유: 썸네일(로고) 보장 */
-function defaultShareImage(){ return absPath('img/logo_kakao.png'); }
+/* 공유 썸네일: 파일명 고정(카카오톡 썸네일.png, 절대 URL) */
+function defaultShareImage(){
+  return "https://snakecrap810806-gif.github.io/woosuyoung/img/%EC%B9%B4%EC%B9%B4%EC%98%A4%ED%86%A1%20%EC%8D%B8%EB%84%A4%EC%9D%BC.png";
+}
 function resolveShareImage(){
   return (cfg.imgUrl && /^https?:\/\//.test(cfg.imgUrl)) ? cfg.imgUrl : defaultShareImage();
 }
+
 function shareToKakao(d){
   shareStatus.className="alert hidden";
   if(!ensureKakaoInit()) return;
